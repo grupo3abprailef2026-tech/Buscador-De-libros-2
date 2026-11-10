@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Biblioteca del colegio</title>
+<style>
+:root{
+  --bg:#fbfbfd; --surface:#fff; --text:#1d1d1f; --muted:#6e6e73; --line:rgba(0,0,0,.08);
+  --accent:#0071e3; --ok:#1d8a3e; --okbg:#e7f6ec; --no:#b3261e; --nobg:#fdeceb;
+  --glass:rgba(251,251,253,.72); --shadow:0 2px 12px rgba(0,0,0,.06),0 12px 32px rgba(0,0,0,.06);
+  --font:-apple-system,BlinkMacSystemFont,"SF Pro Display","SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --serif:ui-serif,"New York",Georgia,"Times New Roman",serif;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#000;--surface:#1c1c1e;--text:#f5f5f7;--muted:#98989d;--line:rgba(255,255,255,.12);
+  --accent:#2997ff;--ok:#5fd785;--okbg:rgba(48,209,88,.16);--no:#ff8a80;--nobg:rgba(255,69,58,.16);
+  --glass:rgba(0,0,0,.66);--shadow:0 2px 12px rgba(0,0,0,.5)}
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);
+  -webkit-font-smoothing:antialiased;line-height:1.4;
+  padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 22px}
+
+.hero{padding:72px 0 28px;text-align:center;animation:rise .9s var(--ease) both}
+.hero h1{font-size:clamp(2.4rem,7vw,4.5rem);font-weight:700;letter-spacing:-.035em;line-height:1.04;margin:0 0 14px}
+.hero p{font-size:clamp(1.05rem,2.4vw,1.4rem);color:var(--muted);margin:0 auto;max-width:34ch;letter-spacing:-.01em}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+
+.bar{position:sticky;top:0;z-index:20;padding:12px 0;
+  background:var(--glass);-webkit-backdrop-filter:saturate(180%) blur(22px);backdrop-filter:saturate(180%) blur(22px);
+  border-bottom:1px solid transparent;transition:border-color .3s}
+.bar.stuck{border-color:var(--line)}
+.search{position:relative;max-width:640px;margin:0 auto}
+.search svg{position:absolute;left:16px;top:50%;translate:0 -50%;width:18px;height:18px;color:var(--muted);pointer-events:none}
+.search input{width:100%;height:48px;border:0;border-radius:14px;padding:0 44px 0 44px;font:inherit;font-size:1.05rem;
+  color:var(--text);background:rgba(120,120,128,.14);outline:none;transition:box-shadow .25s,background .25s}
+.search input::placeholder{color:var(--muted)}
+.search input:focus{background:var(--surface);box-shadow:0 0 0 4px color-mix(in srgb,var(--accent) 30%,transparent),var(--shadow)}
+.search input::-webkit-search-cancel-button{display:none}
+.clear{position:absolute;right:10px;top:50%;translate:0 -50%;width:28px;height:28px;border:0;border-radius:50%;
+  background:rgba(120,120,128,.3);color:var(--surface);cursor:pointer;display:none;font-size:14px;line-height:1}
+.clear.on{display:block}
+
+.tools{display:flex;gap:12px;align-items:center;justify-content:space-between;margin:16px 0 8px;flex-wrap:wrap}
+.chips{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding:4px 2px;flex:1 1 320px;
+  -webkit-mask-image:linear-gradient(90deg,#000 92%,transparent);mask-image:linear-gradient(90deg,#000 92%,transparent)}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;border:0;border-radius:980px;padding:8px 16px;font:inherit;font-size:.9rem;font-weight:500;cursor:pointer;
+  color:var(--text);background:rgba(120,120,128,.14);transition:background .25s,color .25s,transform .2s var(--ease)}
+.chip:hover{background:rgba(120,120,128,.24)}
+.chip:active{transform:scale(.96)}
+.chip[aria-pressed=true]{background:var(--text);color:var(--bg)}
+.opts{display:flex;gap:14px;align-items:center;font-size:.9rem;color:var(--muted)}
+.switch{display:flex;gap:8px;align-items:center;cursor:pointer;user-select:none}
+.switch input{appearance:none;width:42px;height:26px;border-radius:13px;background:rgba(120,120,128,.32);position:relative;
+  transition:background .25s;cursor:pointer;margin:0}
+.switch input::after{content:"";position:absolute;top:2px;left:2px;width:22px;height:22px;border-radius:50%;background:#fff;
+  box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .3s var(--ease)}
+.switch input:checked{background:#34c759}
+.switch input:checked::after{transform:translateX(16px)}
+select{font:inherit;font-size:.9rem;color:var(--text);background:rgba(120,120,128,.14);border:0;border-radius:10px;padding:8px 10px;cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+.count{color:var(--muted);font-size:.9rem;margin:10px 2px 18px;min-height:1.3em}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:26px 20px;padding-bottom:80px}
+.grid.swap .card{animation:pop .45s var(--ease) both;animation-delay:calc(var(--i)*18ms)}
+@keyframes pop{from{opacity:0;transform:scale(.96) translateY(8px)}to{opacity:1;transform:none}}
+.card{all:unset;box-sizing:border-box;cursor:pointer;display:block;border-radius:16px}
+.cover{aspect-ratio:2/3;border-radius:12px;padding:16px 14px;display:flex;flex-direction:column;justify-content:space-between;
+  color:#fff;position:relative;overflow:hidden;box-shadow:0 1px 2px rgba(0,0,0,.2),0 8px 24px rgba(0,0,0,.18);
+  transition:transform .45s var(--ease),box-shadow .45s var(--ease)}
+.cover::before{content:"";position:absolute;inset:0 auto 0 0;width:7px;background:linear-gradient(90deg,rgba(0,0,0,.28),transparent)}
+.cover::after{content:"";position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.22),transparent 45%)}
+.cover b{font-family:var(--serif);font-size:1.12rem;line-height:1.15;letter-spacing:-.01em;position:relative;z-index:1;text-wrap:balance}
+.cover i{font-style:normal;font-size:.72rem;opacity:.85;position:relative;z-index:1}
+.card:hover .cover{transform:translateY(-6px);box-shadow:0 2px 4px rgba(0,0,0,.2),0 18px 36px rgba(0,0,0,.28)}
+.card:active .cover{transform:scale(.98)}
+.meta{padding:12px 2px 0}
+.t{font-weight:600;font-size:.95rem;letter-spacing:-.01em;margin:0 0 2px}
+.a{color:var(--muted);font-size:.85rem;margin:0 0 8px}
+mark{background:color-mix(in srgb,#ffd60a 55%,transparent);color:inherit;border-radius:3px;padding:0 1px}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;font-weight:600;padding:3px 10px;border-radius:980px}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor}
+.pill.ok{color:var(--ok);background:var(--okbg)}
+.pill.no{color:var(--no);background:var(--nobg)}
+
+.empty{grid-column:1/-1;text-align:center;padding:64px 0;color:var(--muted)}
+.empty h2{color:var(--text);font-size:1.5rem;letter-spacing:-.02em;margin:0 0 6px}
+.empty code{background:rgba(120,120,128,.16);padding:2px 6px;border-radius:6px}
+
+dialog{border:0;padding:0;border-radius:24px;max-width:min(760px,calc(100vw - 24px));width:100%;background:var(--surface);color:var(--text);
+  box-shadow:0 30px 80px rgba(0,0,0,.35);overflow:hidden}
+dialog[open]{animation:sheet .5s var(--ease)}
+dialog::backdrop{background:rgba(0,0,0,.4);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);animation:fade .4s both}
+@keyframes sheet{from{opacity:0;transform:translateY(30px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+.sheet{display:grid;grid-template-columns:230px 1fr;gap:28px;padding:32px;position:relative}
+.sheet .cover{box-shadow:0 12px 32px rgba(0,0,0,.3)}
+.sheet h2{font-size:1.9rem;letter-spacing:-.03em;line-height:1.1;margin:0 0 6px}
+.sheet .by{color:var(--muted);font-size:1.05rem;margin:0 0 16px}
+.sheet p.d{font-size:1rem;margin:16px 0;max-width:52ch}
+dl{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;margin:16px 0;font-size:.9rem}
+dt{color:var(--muted)} dd{margin:0}
+.note{background:rgba(120,120,128,.12);border-radius:14px;padding:12px 14px;font-size:.9rem;color:var(--muted)}
+.x{position:absolute;top:14px;right:14px;width:32px;height:32px;border:0;border-radius:50%;background:rgba(120,120,128,.2);
+  color:var(--muted);cursor:pointer;font-size:16px}
+@media (max-width:620px){.sheet{grid-template-columns:1fr;padding:24px}.sheet .cover{max-width:150px}.hero{padding-top:48px}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}html{scroll-behavior:auto}}
+footer{text-align:center;color:var(--muted);font-size:.85rem;padding:0 0 48px}
+footer a{color:var(--accent);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <h1 id="title">Biblioteca</h1>
+    <p id="tagline">Encuentra tu próxima lectura.</p>
+  </header>
+</div>
+
+<div class="bar" id="bar">
+  <div class="wrap">
+    <div class="search">
+      <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4 4"/></svg>
+      <input id="q" type="search" placeholder="Título, autor, tema o ISBN" autocomplete="off" aria-label="Buscar libros">
+      <button class="clear" id="clear" aria-label="Borrar búsqueda">✕</button>
+    </div>
+  </div>
+</div>
+
+<main class="wrap">
+  <div class="tools">
+    <div class="chips" id="chips" role="group" aria-label="Categorías"></div>
+    <div class="opts">
+      <label class="switch"><input type="checkbox" id="onlyFree"> Solo disponibles</label>
+      <select id="sort" aria-label="Ordenar">
+        <option value="title">Título</option>
+        <option value="author">Autor</option>
+        <option value="free">Disponibles primero</option>
+      </select>
+    </div>
+  </div>
+  <div class="count" id="count" aria-live="polite"></div>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer>Proyecto de código abierto · <a id="repo" href="#">Agrega un libro en GitHub</a></footer>
+
+<dialog id="sheet" aria-label="Detalle del libro"></dialog>
+
+<script>
+/* ========== CONFIGURACIÓN: edita solo esta parte ========== */
+const CONFIG = {
+  schoolName: "Biblioteca del colegio",
+  tagline: "Encuentra tu próxima lectura.",
+  loanInfo: "Para pedir este libro, acércate a la biblioteca del colegio con tu credencial.",
+  repoUrl: "https://github.com/TU-USUARIO/TU-REPOSITORIO",
+  dataFile: "books.json"
+};
+/* ========================================================== */
+
+const $ = s => document.querySelector(s);
+const norm = s => String(s ?? "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function hl(text, terms){
+  text = String(text ?? "");
+  const n = norm(text);
+  if (!terms.length || n.length !== text.length) return esc(text);
+  const spans = [];
+  terms.forEach(t => { let i = 0, j; while ((j = n.indexOf(t, i)) !== -1) { spans.push([j, j + t.length]); i = j + t.length; } });
+  if (!spans.length) return esc(text);
+  spans.sort((a, b) => a[0] - b[0]);
+  let out = "", pos = 0;
+  for (const [s, e] of spans) { if (s < pos) continue; out += esc(text.slice(pos, s)) + "<mark>" + esc(text.slice(s, e)) + "</mark>"; pos = e; }
+  return out + esc(text.slice(pos));
+}
+
+const hue = str => { let h = 7; for (const c of String(str)) h = (h * 31 + c.charCodeAt(0)) % 360; return h; };
+const coverStyle = b => {
+  if (b.color) return `background:linear-gradient(160deg,${esc(b.color)},#111)`;
+  const h = hue(b.title + b.author);
+  return `background:linear-gradient(160deg,hsl(${h} 58% 52%),hsl(${(h + 35) % 360} 62% 30%))`;
+};
+
+let books = [], category = "Todas", timer;
+
+function render(animate = true){
+  const terms = norm($("#q").value).split(/\s+/).filter(Boolean);
+  const onlyFree = $("#onlyFree").checked, sort = $("#sort").value;
+
+  let list = books.filter(b => {
+    if (category !== "Todas" && b.category !== category) return false;
+    if (onlyFree && !b.available) return false;
+    const hay = norm([b.title, b.author, b.category, b.isbn, b.description].join(" "));
+    return terms.every(t => hay.includes(t));
+  });
+
+  list.sort((a, b) => {
+    if (sort === "free" && a.available !== b.available) return a.available ? -1 : 1;
+    const k = sort === "author" ? "author" : "title";
+    return String(a[k]).localeCompare(String(b[k]), "es");
+  });
+
+  $("#count").textContent = list.length === 1 ? "1 libro" : `${list.length} libros`;
+  const grid = $("#grid");
+  grid.classList.remove("swap");
+
+  if (!list.length) {
+    grid.innerHTML = `<div class="empty"><h2>Sin resultados</h2><p>Prueba con otra palabra, quita un filtro o revisa la ortografía.</p></div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map((b, i) => `
+    <button class="card" style="--i:${Math.min(i, 24)}" data-id="${books.indexOf(b)}" aria-label="${esc(b.title)}, ${esc(b.author)}">
+      <div class="cover" style="${coverStyle(b)}"><b>${esc(b.title)}</b><i>${esc(b.author)}</i></div>
+      <div class="meta">
+        <p class="t">${hl(b.title, terms)}</p>
+        <p class="a">${hl(b.author, terms)}</p>
+        <span class="pill ${b.available ? "ok" : "no"}">${b.available ? "Disponible" : "Prestado"}</span>
+      </div>
+    </button>`).join("");
+
+  if (animate) { void grid.offsetWidth; grid.classList.add("swap"); }
+}
+
+function buildChips(){
+  const cats = ["Todas", ...new Set(books.map(b => b.category).filter(Boolean))].sort((a, b) => a === "Todas" ? -1 : b === "Todas" ? 1 : a.localeCompare(b, "es"));
+  $("#chips").innerHTML = cats.map(c => `<button class="chip" aria-pressed="${c === category}" data-cat="${esc(c)}">${esc(c)}</button>`).join("");
+}
+
+function openSheet(b){
+  $("#sheet").innerHTML = `
+    <div class="sheet">
+      <button class="x" aria-label="Cerrar" id="closeSheet">✕</button>
+      <div class="cover" style="${coverStyle(b)}"><b>${esc(b.title)}</b><i>${esc(b.author)}</i></div>
+      <div>
+        <span class="pill ${b.available ? "ok" : "no"}">${b.available ? "Disponible" : "Prestado"}</span>
+        <h2 style="margin-top:12px">${esc(b.title)}</h2>
+        <p class="by">${esc(b.author)}</p>
+        ${b.description ? `<p class="d">${esc(b.description)}</p>` : ""}
+        <dl>
+          <dt>Categoría</dt><dd>${esc(b.category)}</dd>
+          ${b.year ? `<dt>Año</dt><dd>${esc(b.year)}</dd>` : ""}
+          ${b.isbn ? `<dt>ISBN</dt><dd>${esc(b.isbn)}</dd>` : ""}
+          ${b.location ? `<dt>Ubicación</dt><dd>${esc(b.location)}</dd>` : ""}
+        </dl>
+        <div class="note">${b.available ? esc(CONFIG.loanInfo) : "Este libro está prestado en este momento. Vuelve a revisar pronto."}</div>
+      </div>
+    </div>`;
+  $("#sheet").showModal();
+  $("#closeSheet").addEventListener("click", () => $("#sheet").close());
+}
+
+async function init(){
+  document.title = CONFIG.schoolName;
+  $("#title").textContent = CONFIG.schoolName;
+  $("#tagline").textContent = CONFIG.tagline;
+  $("#repo").href = CONFIG.repoUrl + "#c%C3%B3mo-agregar-un-libro";
+
+  try {
+    const res = await fetch(CONFIG.dataFile, { cache: "no-cache" });
+    if (!res.ok) throw new Error(res.status);
+    books = (await res.json()).filter(b => b && b.title);
+  } catch (e) {
+    $("#grid").innerHTML = `<div class="empty"><h2>No se pudo cargar el catálogo</h2>
+      <p>Si abriste el archivo con doble clic, el navegador bloquea <code>${esc(CONFIG.dataFile)}</code>.<br>
+      Publícalo con GitHub Pages o ejecuta <code>python3 -m http.server</code> en la carpeta.</p></div>`;
+    return;
+  }
+  buildChips();
+  render();
+}
+
+$("#q").addEventListener("input", () => {
+  $("#clear").classList.toggle("on", !!$("#q").value);
+  clearTimeout(timer); timer = setTimeout(() => render(true), 120);
+});
+$("#clear").addEventListener("click", () => { $("#q").value = ""; $("#clear").classList.remove("on"); $("#q").focus(); render(); });
+$("#onlyFree").addEventListener("change", () => render());
+$("#sort").addEventListener("change", () => render());
+$("#chips").addEventListener("click", e => {
+  const c = e.target.closest(".chip"); if (!c) return;
+  category = c.dataset.cat;
+  document.querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", x === c));
+  c.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" });
+  render();
+});
+$("#grid").addEventListener("click", e => {
+  const c = e.target.closest(".card"); if (c) openSheet(books[+c.dataset.id]);
+});
+$("#sheet").addEventListener("click", e => { if (e.target === e.currentTarget) e.currentTarget.close(); });
+document.addEventListener("keydown", e => {
+  if (e.key === "/" && document.activeElement !== $("#q")) { e.preventDefault(); $("#q").focus(); }
+});
+new IntersectionObserver(([en]) => $("#bar").classList.toggle("stuck", !en.isIntersecting), { rootMargin: "-1px 0px 0px 0px" })
+  .observe(document.querySelector(".hero"));
+
+init();
+</script>
+</body>
+</html>
