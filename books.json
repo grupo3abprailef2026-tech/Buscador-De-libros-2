@@ -1,0 +1,122 @@
+[
+  {
+    "title": "Cien años de soledad",
+    "author": "Gabriel García Márquez",
+    "category": "Novela",
+    "isbn": "9780307474728",
+    "year": 1967,
+    "available": true,
+    "description": "La historia de la familia Buendía a lo largo de siete generaciones en el pueblo ficticio de Macondo.",
+    "location": "Estante A2"
+  },
+  {
+    "title": "El principito",
+    "author": "Antoine de Saint-Exupéry",
+    "category": "Infantil",
+    "isbn": "9780156012195",
+    "year": 1943,
+    "available": false,
+    "description": "Un piloto perdido en el desierto conoce a un pequeño príncipe que viaja de planeta en planeta.",
+    "location": "Estante B1"
+  },
+  {
+    "title": "Don Quijote de la Mancha",
+    "author": "Miguel de Cervantes",
+    "category": "Clásico",
+    "isbn": "9788491050216",
+    "year": 1605,
+    "available": true,
+    "description": "Las aventuras de un hidalgo que enloquece leyendo novelas de caballería y sale al mundo a imitarlas.",
+    "location": "Estante A1"
+  },
+  {
+    "title": "Historia de una escalera",
+    "author": "Antonio Buero Vallejo",
+    "category": "Teatro",
+    "isbn": "9788467033533",
+    "year": 1949,
+    "available": true,
+    "description": "Tres generaciones de vecinos comparten una escalera y los mismos sueños sin cumplir.",
+    "location": "Estante C3"
+  },
+  {
+    "title": "Matemáticas 8° básico",
+    "author": "Varios autores",
+    "category": "Texto escolar",
+    "isbn": "",
+    "year": 2022,
+    "available": false,
+    "description": "Texto del estudiante con ejercicios de álgebra, geometría y probabilidades.",
+    "location": "Estante D1"
+  },
+  {
+    "title": "La casa de los espíritus",
+    "author": "Isabel Allende",
+    "category": "Novela",
+    "isbn": "9788401337208",
+    "year": 1982,
+    "available": true,
+    "description": "La saga de la familia Trueba, entre lo cotidiano, lo político y lo sobrenatural.",
+    "location": "Estante A3"
+  },
+  {
+    "title": "Veinte poemas de amor y una canción desesperada",
+    "author": "Pablo Neruda",
+    "category": "Poesía",
+    "isbn": "9789563247282",
+    "year": 1924,
+    "available": true,
+    "description": "El libro que dio fama temprana a Neruda, con poemas sobre el amor y la ausencia.",
+    "location": "Estante E1"
+  },
+  {
+    "title": "Una breve historia del tiempo",
+    "author": "Stephen Hawking",
+    "category": "Ciencia",
+    "isbn": "9788498929485",
+    "year": 1988,
+    "available": true,
+    "description": "Una introducción accesible al universo, los agujeros negros y la naturaleza del tiempo.",
+    "location": "Estante F2"
+  },
+  {
+    "title": "Sapiens: de animales a dioses",
+    "author": "Yuval Noah Harari",
+    "category": "Historia",
+    "isbn": "9788499926223",
+    "year": 2011,
+    "available": false,
+    "description": "Un recorrido por la historia de la humanidad, desde los cazadores recolectores hasta hoy.",
+    "location": "Estante G1"
+  },
+  {
+    "title": "Harry Potter y la piedra filosofal",
+    "author": "J. K. Rowling",
+    "category": "Fantasía",
+    "isbn": "9788478884452",
+    "year": 1997,
+    "available": true,
+    "description": "Un niño huérfano descubre que es mago y entra al colegio Hogwarts.",
+    "location": "Estante B3"
+  },
+  {
+    "title": "Fahrenheit 451",
+    "author": "Ray Bradbury",
+    "category": "Ciencia ficción",
+    "isbn": "9788497593779",
+    "year": 1953,
+    "available": true,
+    "description": "En una sociedad donde los libros están prohibidos, un bombero empieza a dudar de su trabajo.",
+    "location": "Estante H2"
+  },
+  {
+    "title": "Casa de muñecas",
+    "author": "Henrik Ibsen",
+    "category": "Teatro",
+    "isbn": "9788491050490",
+    "year": 1879,
+    "available": true,
+    "description": "Nora, esposa y madre, toma una decisión que sacude las normas de su época.",
+    "location": "Estante C1"
+  }
+]
